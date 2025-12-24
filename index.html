@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Millionaire YT UC Store - BGMI Official Partner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { 
+            font-family:'Poppins',sans-serif; 
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0d2e 50%, #2d1b69 100%);
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120,219,255,0.3) 0%, transparent 50%);
+            color:#fff; overflow-x:hidden; 
+            position: relative;
+        }
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,255,255,0.03)"/><circle cx="50" cy="10" r="0.8" fill="rgba(255,255,255,0.04)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none; z-index: 9999;
+        }
+        
+        .container { max-width:400px; margin:0 auto; padding:20px; min-height:100vh; display:flex; flex-direction:column; position: relative; z-index: 1; }
+        
+        /* BGMI Header */
+        .header { text-align:center; margin-bottom:30px; background: rgba(0,0,0,0.7); backdrop-filter: blur(20px); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,215,0,0.3); }
+        .logo { 
+            font-family:'Orbitron',monospace; font-size:32px; font-weight:900; 
+            background: linear-gradient(45deg, #00d4ff, #ffd700, #ff4d4d, #00ff88);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; 
+            margin-bottom:10px; animation: bgmiGlow 3s ease-in-out infinite alternate;
+            text-shadow: 0 0 30px rgba(0,212,255,0.5);
+        }
+        .official-badge { 
+            background: linear-gradient(45deg, #ffd700, #ff6b35); color: #000; padding: 4px 12px; 
+            border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; 
+            animation: pulse 2s infinite; box-shadow: 0 5px 15px rgba(255,215,0,0.4);
+        }
+        .tagline { color:#aaa; font-size:14px; font-weight:300; margin-top:10px; }
+        
+        /* Progress Bar */
+        .progress-container { 
+            display:flex; justify-content:space-between; margin-bottom:30px; position:relative; 
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); padding: 10px; border-radius: 15px;
+            border: 1px solid rgba(255,215,0,0.2);
+        }
+        .progress-step { 
+            width:30px; height:30px; border-radius:50%; background:#1a1a1a; display:flex; align-items:center; 
+            justify-content:center; font-size:12px; font-weight:600; position:relative; z-index:2; 
+            transition:all 0.3s ease; border: 2px solid rgba(255,255,255,0.1);
+        }
+        .progress-step.active { 
+            background: linear-gradient(45deg,#00d4ff,#ffd700); box-shadow:0 0 20px rgba(0,212,255,0.8); 
+            color: #000; border-color: #ffd700;
+        }
+        .progress-step.completed { background: linear-gradient(45deg,#00ff88,#00d4ff); color:#000; box-shadow:0 0 20px rgba(0,255,136,0.8); }
+        .progress-line { 
+            height:3px; background:#1a1a1a; position:absolute; top:18px; width:calc(33.33% - 15px); 
+            z-index:1; transition:background 0.3s ease; border-radius: 2px;
+        }
+        .progress-line.active { background: linear-gradient(90deg,#00d4ff,#ffd700); box-shadow: 0 0 10px rgba(0,212,255,0.5); }
+        
+        /* Steps */
+        .step { display:none; animation:slideIn 0.5s ease; }
+        .step.active { display:block; }
+        @keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+        
+        .step-content { 
+            background: rgba(0,0,0,0.8); backdrop-filter:blur(25px); border-radius:25px; 
+            padding:35px 25px; border:2px solid rgba(255,215,0,0.15); 
+            box-shadow:0 25px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .step-title { 
+            font-family:'Orbitron',monospace; font-size:26px; font-weight:900; text-align:center; 
+            margin-bottom:25px; background: linear-gradient(45deg,#00d4ff,#ffd700,#ff4d4d);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; 
+            text-shadow: 0 0 20px rgba(0,212,255,0.5);
+        }
+        
+        /* Packs Grid - BGMI Style */
+        .packs-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:25px; }
+        .pack-card { 
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.4)); 
+            border-radius:20px; padding:25px 15px; text-align:center; cursor:pointer; 
+            transition:all 0.4s cubic-bezier(0.25,0.46,0.45,0.94); 
+            border:2px solid rgba(0,212,255,0.3); position: relative; overflow: hidden;
+        }
+        .pack-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .pack-card:hover::before { left: 100%; }
+        .pack-card:hover { 
+            transform: translateY(-8px) scale(1.02); border-color:#ffd700; 
+            box-shadow:0 20px 40px rgba(0,212,255,0.4), 0 0 30px rgba(255,215,0,0.3);
+        }
+        .pack-card.selected { 
+            border-color:#ffd700 !important; background: linear-gradient(135deg,rgba(255,215,0,0.25),rgba(0,212,255,0.2)); 
+            transform: translateY(-8px) scale(1.02) !important; 
+            box-shadow:0 25px 50px rgba(255,215,0,0.5), 0 0 40px rgba(0,212,255,0.6) !important;
+        }
+        .pack-uc { font-family:'Orbitron',monospace; font-size:24px; font-weight:900; color:#00ff88; margin-bottom:8px; }
+        .pack-price { font-size:20px; font-weight:800; color:#ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        
+        /* Form */
+        .form-group { margin-bottom:25px; }
+        .form-label { 
+            display:block; font-weight:700; margin-bottom:12px; color:#e0e0e0; 
+            font-size: 15px; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .form-input { 
+            width:100%; padding:18px; background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.3)); 
+            border:2px solid rgba(0,212,255,0.4); border-radius:15px; color:#fff; font-size:16px; 
+            transition:all 0.3s ease; backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+        .form-input:focus { 
+            outline:none; border-color:#ffd700; box-shadow:0 0 25px rgba(255,215,0,0.6); 
+            background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(0,0,0,0.2));
+        }
+        .form-input::placeholder { color:#888; }
+        
+        /* Payment */
+        .payment-section { text-align:center; }
+        .upi-qr { 
+            width:200px; height:200px; margin:25px auto; border-radius:20px; 
+            box-shadow:0 15px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,215,0,0.3); 
+            border: 3px solid rgba(255,215,0,0.4); display:none;
+        }
+        .upi-id { 
+            font-family:'Orbitron',monospace; font-size:20px; font-weight:800; color:#ffd700; 
+            word-break:break-all; background:rgba(0,0,0,0.7); padding:15px; border-radius:15px; 
+            margin:20px 0; display:none; text-shadow: 0 0 10px rgba(255,215,0,0.5);
+            border: 1px solid rgba(255,215,0,0.3);
+        }
+        
+        /* Upload */
+        .file-upload-area { 
+            border:3px dashed rgba(0,212,255,0.7); border-radius:20px; padding:45px 25px; 
+            text-align:center; transition:all 0.3s ease; cursor:pointer; 
+            background: linear-gradient(145deg, rgba(0,212,255,0.1), rgba(0,0,0,0.3)); 
+            margin:25px 0; backdrop-filter: blur(15px);
+        }
+        .file-upload-area:hover { background: linear-gradient(145deg, rgba(0,212,255,0.2), rgba(0,0,0,0.4)); border-color:#ffd700; }
+        .file-upload-area.dragover { border-color:#00ff88 !important; background: linear-gradient(145deg, rgba(0,255,136,0.3), rgba(0,0,0,0.4)) !important; }
+        #screenshotPreview { max-width:100%; max-height:220px; border-radius:15px; margin-top:20px; display:none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        /* Buttons */
+        .btn { 
+            padding:18px 35px; border:none; border-radius:15px; font-size:16px; font-weight:700; 
+            cursor:pointer; transition:all 0.3s cubic-bezier(0.25,0.46,0.45,0.94); width:100%; 
+            margin-bottom:12px; font-family: 'Orbitron', monospace; position: relative; overflow: hidden;
+        }
+        .btn-primary { 
+            background: linear-gradient(45deg,#ffd700,#ff6b35,#ffd700); color:#000; 
+            box-shadow:0 15px 35px rgba(255,215,0,0.5); text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-primary:hover { transform:translateY(-3px); box-shadow:0 20px 45px rgba(255,215,0,0.7); }
+        .btn-secondary { 
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.3)); 
+            color:#fff; border:2px solid rgba(0,212,255,0.5); backdrop-filter: blur(10px);
+        }
+        .btn-secondary:hover { background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(0,0,0,0.2)); border-color:#ffd700; transform:translateY(-2px); }
+        .btn:disabled { opacity:0.5; cursor:not-allowed; transform:none !important; }
+        
+        /* Success */
+        .success-screen { text-align:center; padding:70px 25px; }
+        .success-icon { font-size:90px; color:#00ff88; margin-bottom:25px; animation:bounce 1.5s infinite; text-shadow: 0 0 30px rgba(0,255,136,0.8); }
+        .success-title { font-size:32px; font-weight:900; margin-bottom:20px; color:#00ff88; font-family: 'Orbitron', monospace; }
+        
+        /* Animations */
+        @keyframes bgmiGlow { 0% { filter: hue-rotate(0deg) brightness(1); } 100% { filter: hue-rotate(360deg) brightness(1.2); } }
+        @keyframes pulse { 0% { transform:scale(1); } 50% { transform:scale(1.05); } 100% { transform:scale(1); } }
+        @keyframes bounce { 0%,20%,50%,80%,100% { transform:translateY(0); } 40% { transform:translateY(-15px); } 60% { transform:translateY(-8px); } }
+        
+        @media (max-width:480px) { .container { padding:15px; } .logo { font-size:28px; } .step-content { padding:30px 20px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo">Millionaire YT UC</h1>
+            <div class="official-badge">BGMI Official Partner</div>
+            <p class="tagline">⚡ Instant Delivery • 100% Safe • 24/7 Support</p>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-line" id="line1"></div>
+            <div class="progress-step active" data-step="1">1</div>
+            <div class="progress-line" id="line2"></div>
+            <div class="progress-step" data-step="2">2</div>
+            <div class="progress-line" id="line3"></div>
+            <div class="progress-step" data-step="3">3</div>
+            <div class="progress-line" id="line4"></div>
+            <div class="progress-step" data-step="4">4</div>
+        </div>
+        
+        <!-- STEP 1: PACKS -->
+        <div id="step1" class="step active">
+            <div class="step-content">
+                <h2 class="step-title">Select UC Pack</h2>
+                <div class="packs-grid" id="packsGrid">
+                    <div class="pack-card" data-uc="60" data-price="40">
+                        <div class="pack-uc">60 UC</div>
+                        <div class="pack-price">₹40</div>
+                    </div>
+                    <div class="pack-card" data-uc="1900" data-price="950">
+                        <div class="pack-uc">1900 UC</div>
+                        <div class="pack-price">₹950</div>
+                    </div>
+                    <div class="pack-card" data-uc="3850" data-price="1540">
+                        <div class="pack-uc">3850 UC</div>
+                        <div class="pack-price">₹1540</div>
+                    </div>
+                    <div class="pack-card" data-uc="8100" data-price="2430">
+                        <div class="pack-uc">8100 UC</div>
+                        <div class="pack-price">₹2430</div>
+                    </div>
+                    <div class="pack-card" data-uc="16200" data-price="4100">
+                        <div class="pack-uc">16200 UC</div>
+                        <div class="pack-price">₹4100</div>
+                    </div>
+                    <div class="pack-card" data-uc="32400" data-price="7800">
+                        <div class="pack-uc">32400 UC</div>
+                        <div class="pack-price">₹7800</div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" id="next1" disabled>Continue →</button>
+            </div>
+        </div>
+        
+        <!-- STEP 2: DETAILS -->
+        <div id="step2" class="step">
+            <div class="step-content">
+                <h2 class="step-title">Player Details</h2>
+                <div class="form-group">
+                    <label class="form-label">Selected Pack</label>
+                    <div style="background: rgba(0,212,255,0.2); padding: 15px; border-radius: 12px; border: 1px solid rgba(0,212,255,0.4);">
+                        <strong id="selectedPackDisplay" style="color: #00ff88; font-size: 18px;">-</strong>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">BGMI UID</label>
+                    <input type="tel" class="form-input" id="uid" placeholder="Enter 10-digit UID" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">In-Game Name (IGN)</label>
+                    <input type="text" class="form-input" id="ign" placeholder="Your BGMI name">
+                </div>
+                <button type="button" class="btn btn-secondary" id="back2">← Back</button>
+                <button type="button" class="btn btn-primary" id="next2" disabled>Next: Payment →</button>
+            </div>
+        </div>
+        
+        <!-- STEP 3: PAYMENT -->
+        <div id="step3" class="step">
+            <div class="step-content">
+                <h2 class="step-title">Complete Payment</h2>
+                <div class="payment-section">
+                    <img src="upi-qr.jpg" alt="UPI QR" class="upi-qr" id="upiQr">
+                    <div class="upi-id" id="upiId">adiptl@ptyes</div>
+                    <p style="color:#ffd700; font-size:18px; margin:25px 0; font-weight: 700;">
+                        Pay <strong id="paymentAmount">₹0</strong> via UPI / QR Scan
+                    </p>
+                    <p style="color:#aaa; font-size:14px; font-style: italic;">Upload payment proof after successful transaction</p>
+                </div>
+                <div class="file-upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt" style="font-size:55px; color:#ffd700; margin-bottom:20px;"></i>
+                    <p style="font-size:18px; font-weight: 600;">📸 Upload Screenshot</p>
+                    <p style="color:#aaa; font-size:14px;">PNG/JPG • Max 5MB</p>
+                    <input type="file" id="screenshot" accept="image/*" style="display:none;">
+                    <img id="screenshotPreview" alt="Preview">
+                </div>
+                <button type="button" class="btn btn-secondary" id="back3">← Back</button>
+                <button type="button" class="btn btn-primary" id="submitBtn" disabled>🚀 Confirm & Send Order</button>
+            </div>
+        </div>
+        
+        <!-- STEP 4: SUCCESS -->
+        <div id="step4" class="step">
+            <div class="step-content success-screen">
+                <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                <h2 class="success-title">Order Confirmed!</h2>
+                <p style="color:#ddd; font-size:18px; margin-bottom:25px;">
+                    ✅ Screenshot sent successfully<br>
+                    ⚡ UC delivery within 10-15 minutes
+                </p>
+                <p style="color:#00ff88; font-size:16px; margin-bottom:30px;">
+                    <i class="fas fa-whatsapp"></i> Check WhatsApp for delivery updates
+                </p>
+                <button type="button" class="btn btn-primary" onclick="location.reload()">New Order</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const adminNumbers = ['6264817544'];
+        let currentStep = 1;
+        let selectedPack = null;
+        let screenshotFile = null;
+
+        updateProgress();
+        
+        document.querySelectorAll('.pack-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.pack-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedPack = { uc: this.dataset.uc, price: this.dataset.price };
+                document.getElementById('next1').disabled = false;
+            });
+        });
+
+        document.getElementById('next1').onclick = function() {
+            if (selectedPack) {
+                document.getElementById('selectedPackDisplay').textContent = `${selectedPack.uc} UC - ₹${selectedPack.price}`;
+                showStep(2);
+            }
+        };
+
+        document.getElementById('uid').oninput = validateStep2;
+        document.getElementById('ign').oninput = validateStep2;
+        function validateStep2() {
+            const uid = document.getElementById('uid').value;
+            const ign = document.getElementById('ign').value;
+            document.getElementById('next2').disabled = !(uid.length === 10 && ign.trim());
+        }
+
+        document.getElementById('next2').onclick = function() {
+            document.getElementById('paymentAmount').textContent = `₹${selectedPack.price}`;
+            document.getElementById('upiQr').style.display = 'block';
+            document.getElementById('upiId').style.display = 'block';
+            showStep(3);
+        };
+
+        document.getElementById('back2').onclick = () => showStep(1);
+        document.getElementById('back3').onclick = () => showStep(2);
+
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('screenshot');
+        const preview = document.getElementById('screenshotPreview');
+        const submitBtn = document.getElementById('submitBtn');
+
+        uploadArea.onclick = () => fileInput.click();
+        fileInput.onchange = handleFile;
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => uploadArea.classList.remove('dragover'), false);
+        });
+
+        uploadArea.ondrop = (e) => {
+            fileInput.files = e.dataTransfer.files;
+            handleFile({ target: fileInput });
+        };
+
+        function handleFile(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/') && file.size < 5*1024*1024) {
+                screenshotFile = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    submitBtn.disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 🔥 PERFECT WHATSAPP FORMAT (Fixed spacing)
+        submitBtn.onclick = function() {
+            if (!screenshotFile || !selectedPack) return;
+            
+            this.disabled = true;
+            this.textContent = 'Sending...';
+
+            const uid = document.getElementById('uid').value.trim();
+            const ign = document.getElementById('ign').value.trim();
+            
+            const message = `*🛒 NEW UC ORDER 🛒*%0A%0A` +
+                          `*👑 Millionaire YT UC Store*%0A%0A` +
+                          `*📦 ${selectedPack.uc} UC*%0A` +
+                          `*💰 ₹${selectedPack.price}*%0A%0A` +
+                          `*🆔 BGMI UID:* ${uid}%0A` +
+                          `*🎮 IGN:* ${ign}%0A%0A` +
+                          `*💳 Payment:* Screenshot uploaded%0A` +
+                          `*⏰ Time:* ${new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'})}%0A%0A` +
+                          `*✅ ACTION:* Verify payment → Deliver UC%0A` +
+                          `*⚡ Delivery:* 10-15 mins`;
+
+            adminNumbers.forEach(num => {
+                const whatsappUrl = `https://wa.me/91${num}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            });
+
+            showStep(4);
+        };
+
+        function showStep(step) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+            currentStep = step;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                step.classList.toggle('completed', index < currentStep - 1);
+                step.classList.toggle('active', index === currentStep - 1);
+            });
+            document.querySelectorAll('.progress-line').forEach((line, index) => {
+                line.classList.toggle('active', index < currentStep - 1);
+            });
+        }
+    </script>
+</body>
+</html>
